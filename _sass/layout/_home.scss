@@ -1,0 +1,149 @@
+/*
+   Home-page sections (Publications, Teaching, Education)
+   The content column is indented past the photo; these break back out so they
+   start at the photo's left edge and run the full width.
+   ========================================================================== */
+
+.home-section {
+  margin-top: 2.5em;
+
+  /* wider gap between consecutive sections than between the intro and the
+     first one, so the sections read as separate blocks */
+  & + & {
+    margin-top: 4em;
+  }
+
+  @include breakpoint($large) {
+    margin-left: -($author-photo-size + $author-photo-gap);
+  }
+
+  h2 {
+    margin-top: 0;
+    font-size: $type-size-3;
+  }
+}
+
+.entry {
+  margin-bottom: 1.5em;
+
+  &--compact {
+    margin-bottom: 0.9em;
+  }
+
+  &__title {
+    /* title left, years flush right on the same line */
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1em;
+    margin: 0 0 0.2em;
+    font-size: $type-size-5;
+    line-height: 1.3;
+  }
+
+  &__years {
+    flex: 0 0 auto;
+    font-weight: normal;
+    opacity: 0.8;
+  }
+
+  &__meta {
+    margin: 0 0 0.3em;
+    opacity: 0.8;
+  }
+
+  /* the role, set apart from the course as a small label -- no bold, no italic.
+     Don't shrink much further: uppercase + letter-spacing gets hard to read. */
+  &__role {
+    margin-left: 0.6em;
+    font-size: 0.66em;
+    font-weight: normal; /* stay light even inside the bold entry title */
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  &__note {
+    font-weight: normal;
+    opacity: 0.7;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+/*
+   Publication rows: thumbnail on the left, details on the right.
+   The thumbnail is optional -- set `header: teaser:` in the paper's front
+   matter and it appears; omit it and the text simply runs full width.
+   ========================================================================== */
+
+$pub-thumb-width: 270px;
+
+.pub-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5em;
+  margin-bottom: 1.75em;
+
+  /* stack on narrow screens */
+  @media screen and (max-width: $large) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  &__thumb {
+    flex: 0 0 $pub-thumb-width;
+
+    /* the wrapper is a link; keep it a block so it doesn't add inline gaps */
+    a {
+      display: block;
+    }
+
+    img {
+      width: 100%;
+      max-width: $pub-thumb-width;
+      border-radius: $border-radius;
+      /* transform doesn't reflow, so the zoom overlaps rather than
+         pushing the text around; z-index keeps it on top */
+      transition: transform 0.2s ease-in-out;
+    }
+
+    &:hover img {
+      position: relative;
+      z-index: 2;
+      transform: scale(1.18);
+    }
+  }
+
+  &__body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  &__title {
+    margin: 0 0 0.2em;
+    font-size: $type-size-5;
+    line-height: 1.3;
+
+    /* overrides the underline .page__content puts on every link */
+    a {
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__authors {
+    margin: 0 0 0.15em;
+  }
+
+  &__venue {
+    margin: 0;
+    opacity: 0.8;
+  }
+}
+

@@ -1,0 +1,41 @@
+{% include base_path %}
+
+<div class="pub-row">
+  {% if post.header.teaser %}
+    {% capture teaser_img %}<img src=
+        {% if post.header.teaser contains "://" %}
+          "{{ post.header.teaser }}"
+        {% else %}
+          "{{ post.header.teaser | prepend: "/images/" | prepend: base_path }}"
+        {% endif %}
+        alt="" loading="lazy">{% endcapture %}
+    <div class="pub-row__thumb">
+      {% comment %}
+        The thumbnail links to the same place as the title. It's hidden from
+        keyboard and screen readers so the duplicate destination isn't
+        announced or tabbed through twice.
+      {% endcomment %}
+      {% if post.link %}
+        <a href="{{ post.link }}" tabindex="-1" aria-hidden="true">{{ teaser_img }}</a>
+      {% else %}
+        {{ teaser_img }}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="pub-row__body">
+    {% comment %}
+      `link` points the title at the paper's repo / arXiv / project page. The
+      publications collection has output: false, so there is no per-paper page
+      to fall back on -- a paper without a link is plain text, not a dead link.
+    {% endcomment %}
+    <h3 class="pub-row__title">
+      {% if post.link %}<a href="{{ post.link }}">{{ post.title }}</a>{% else %}{{ post.title }}{% endif %}
+    </h3>
+    {% if post.authors %}
+      {% capture author_self %}<strong>{{ site.author.name }}</strong>{% endcapture %}
+      <p class="pub-row__authors">{{ post.authors | replace: site.author.name, author_self }}</p>
+    {% endif %}
+    <p class="pub-row__venue">{{ post.venue }}, {{ post.date | default: "1900-01-01" | date: "%Y" }}</p>
+  </div>
+</div>

@@ -31,7 +31,7 @@
     font-family: $sans-serif-narrow;
 
     @include breakpoint($x-large) {
-      max-width: $x-large;
+      max-width: $page-max-width;
     }
 
     nav {
@@ -61,7 +61,6 @@
   white-space: nowrap;
 
   &--lg {
-    padding-right: 2em;
     font-weight: 700;
   }
 }

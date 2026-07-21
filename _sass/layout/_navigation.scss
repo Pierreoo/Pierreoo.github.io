@@ -205,6 +205,14 @@
   .visible-links {
     display: table;
 
+    /* Line the nav up with the home page's photo, which is pulled the same
+       16px past the content edge ($author-photo-pull in _sidebar.scss, which
+       imports too late to reference here). Only the links shift -- the theme
+       toggle is positioned against .greedy-nav, so it stays at the right. */
+    @include breakpoint($large) {
+      margin-left: -16px;
+    }
+
     li {
       display: table-cell;
       vertical-align: middle;
@@ -226,6 +234,17 @@
     }
 
     #theme-toggle {
+      /* Pinned to the right rather than stretching .visible-links, because the
+         greedy-nav script compares that list's width against the available
+         space to decide what to collapse. Left in flow below $large so it
+         can't land on top of the hamburger button, which also sits right: 0. */
+      @include breakpoint($large) {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
       a {
         width: 25px;
         display: flex;

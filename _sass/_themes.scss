@@ -55,6 +55,11 @@ $medium-wide                : 900px !default;
 $large                      : 925px !default;
 $x-large                    : 1280px !default;
 
+/* How wide the centred page container may grow. Separate from $x-large, which
+   is the breakpoint at which the cap kicks in. Shared by #main, the masthead
+   and the footer -- they must match or the nav stops lining up with content. */
+$page-max-width             : 1200px !default;
+
 /* ==========================================================================
    Grid
    ========================================================================== */
