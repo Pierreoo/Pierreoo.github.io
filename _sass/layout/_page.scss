@@ -78,7 +78,12 @@
   /* paragraph indents */
   p {
     margin: 0 0 0.7em;
-    text-align: justify;
+
+    /* Justifying needs a column wide enough to absorb the slack. On a phone
+       it opens rivers of white space between words, so only from $large up. */
+    @include breakpoint($large) {
+      text-align: justify;
+    }
 
     /* sibling indentation*/
     @if $paragraph-indent == true {

@@ -13,8 +13,12 @@ $background                 : #474747;
 $background-light           : mix(#fff, $background, 80%);
 $background-lighter         : mix(#fff, $background, 90%);
 $text                       : #ffffff;
-$link                       : #0ea1c5;
-$link-dark                  : mix(#000, $link, 25%);
+/* Lightened from the #0ea1c5 primary: on the #474747 background that scored
+   3.06:1, under the 4.5:1 WCAG AA needs for body-size text. This is 4.81:1. */
+$link                       : #6ec7dc;
+/* Keeps the light theme's variable name, but darkening a link on a dark
+   background drops it to 2.7:1 on hover. Lighten instead. */
+$link-dark                  : mix(#fff, $link, 40%);
 $link-light                 : mix(#fff, $link, 25%);
 
 /* Color codes used for the site */

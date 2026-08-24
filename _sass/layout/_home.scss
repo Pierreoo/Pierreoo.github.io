@@ -110,10 +110,28 @@ $pub-thumb-width: 270px;
       transition: transform 0.2s ease-in-out;
     }
 
-    &:hover img {
-      position: relative;
-      z-index: 2;
-      transform: scale(1.18);
+    /* Touch screens have no real hover: a tap leaves the zoom stuck on,
+       covering the text underneath until you tap elsewhere. Pointer devices
+       only. */
+    @media (hover: hover) {
+      &:hover img {
+        position: relative;
+        z-index: 2;
+        transform: scale(1.18);
+      }
+    }
+
+    /* Stacked, the row is a column, so flex-basis sizes the *height* -- that
+       boxed each thumbnail into a 270px square and left ~90px of dead space
+       under the image. Size to the image and let it use the full column.
+       Must come after the img rule above to override its max-width. */
+    @media screen and (max-width: $large) {
+      flex: 0 0 auto;
+      width: 100%;
+
+      img {
+        max-width: 100%;
+      }
     }
   }
 
