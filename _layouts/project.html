@@ -1,0 +1,341 @@
+---
+layout: compress
+---
+
+{% include base_path %}
+
+{% comment %}
+  Standalone paper project page.
+
+  Deliberately does not extend `default` -- these pages carry no site masthead,
+  sidebar or footer, and load only assets/css/project.css. Everything above the
+  prose (title, authors, buttons, teaser, highlights) is driven by front matter
+  so a new paper page is front matter + Markdown, with no HTML to copy.
+
+  See _pages/projects/gekey.md for the full set of supported fields.
+{% endcomment %}
+
+<!doctype html>
+<html lang="{{ site.locale | slice: 0,2 }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include seo.html %}
+
+    <!-- Academicons, for the arXiv mark on the link buttons. -->
+    <link rel="stylesheet" href="{{ base_path }}/assets/css/academicons.css">
+
+    {% comment %}
+      Favicon. A project page can claim its own tab icon with `favicon_emoji` in
+      front matter -- the emoji is drawn as the sole content of an inline SVG,
+      so no image file is needed. head/custom.html is deliberately NOT included
+      here: it ships the site's own icon set, and declaring both would leave the
+      browser choosing between two competing SVG icons.
+    {% endcomment %}
+    {% comment %}
+      font-size 78 inside a 100-unit box, anchored at the centre. An emoji's
+      advance width runs wider than its nominal size, so setting it at 90 from
+      x=0 pushes the glyph past the right edge and it gets cut off.
+    {% endcomment %}
+    {% if page.favicon_emoji %}
+      <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext x=%2250%22 y=%2250%22 font-size=%2278%22 text-anchor=%22middle%22 dominant-baseline=%22central%22%3E{{ page.favicon_emoji | url_encode }}%3C/text%3E%3C/svg%3E">
+    {% else %}
+      <link rel="apple-touch-icon" sizes="180x180" href="{{ base_path }}/images/apple-touch-icon-180x180.png?v=4">
+      <link rel="icon" type="image/svg+xml" href="{{ base_path }}/images/favicon.svg?v=4">
+      <link rel="icon" type="image/png" href="{{ base_path }}/images/favicon-32x32.png?v=4" sizes="32x32">
+      <link rel="icon" type="image/png" href="{{ base_path }}/images/favicon-192x192.png?v=4" sizes="192x192">
+      <link rel="icon" href="{{ base_path }}/images/favicon.ico?v=4">
+    {% endif %}
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" href="{{ base_path }}/assets/css/project.css">
+    {% if page.mathjax %}
+      {% comment %}
+        Author math with kramdown's $$...$$ (inline when it sits in a line of
+        text, display on its own line); kramdown hands MathJax \(...\) and
+        \[...\], which are the delimiters configured here. A bare $ is NOT a
+        delimiter on purpose -- kramdown strips the LaTeX backslash escapes
+        inside single-$ spans, and a literal "$5" in prose would otherwise open
+        a math run.
+      {% endcomment %}
+      <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [["\\(", "\\)"]],
+            displayMath: [["\\[", "\\]"]]
+          },
+          options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"] }
+        };
+      </script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    {% endif %}
+  </head>
+
+  <body class="pp">
+
+    {% comment %}
+      Fixed top-right menu linking the other project pages. Built from
+      site.pages rather than a hand-kept list, so adding a fourth paper page
+      makes it appear in the other three automatically. Rendered only when
+      there is somewhere else to go.
+    {% endcomment %}
+    {% assign siblings = site.pages
+       | where_exp: "p", "p.url contains '/projects/'"
+       | where_exp: "p", "p.url != page.url"
+       | sort: "seo_title" %}
+    {% if siblings.size > 0 %}
+      <div class="pp__more">
+        <button type="button" class="pp__more-btn" id="pp-more-btn"
+                aria-expanded="false" aria-controls="pp-more-menu">
+          Other Projects
+          <svg class="pp__more-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="pp__more-menu" id="pp-more-menu" hidden>
+          {% comment %}
+            Each entry is marked with that page's own `favicon_emoji`, so the
+            menu icon and the tab icon are the same symbol. The slot is rendered
+            even when a page has no emoji, to keep the names aligned.
+          {% endcomment %}
+          {% for sibling in siblings %}
+            <a class="pp__more-item" href="{{ sibling.url | prepend: base_path }}">
+              <span class="pp__more-icon" aria-hidden="true">{{ sibling.favicon_emoji }}</span>
+              <span class="pp__more-text">
+                <span class="pp__more-name">{{ sibling.seo_title | default: sibling.title }}</span>
+                {% if sibling.venue %}<span class="pp__more-venue">{{ sibling.venue }}</span>{% endif %}
+              </span>
+            </a>
+          {% endfor %}
+          <a class="pp__more-item pp__more-item--home" href="{{ base_path }}/">
+            <span class="pp__more-icon" aria-hidden="true">👤</span>
+            <span class="pp__more-text">
+              <span class="pp__more-name">{{ site.author.name }}</span>
+              <span class="pp__more-venue">All publications</span>
+            </span>
+          </a>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="pp__wrap">
+
+      <header class="pp__header">
+        <h1 class="pp__title">{{ page.title }}</h1>
+
+        {% comment %}
+          Numbered superscripts only earn their place when the authors are
+          actually split across institutions -- that is, when there is more than
+          one affiliation AND some author names which ones apply to them. A
+          shared address written across several lines has nothing to
+          disambiguate, so it is printed plainly.
+        {% endcomment %}
+        {% assign marked_authors = page.authors | where_exp: "author", "author.affiliations" | size %}
+        {% assign show_marks = false %}
+        {% if page.affiliations.size > 1 and marked_authors > 0 %}{% assign show_marks = true %}{% endif %}
+
+        {% if page.authors %}
+          <p class="pp__authors">
+            {% for author in page.authors %}
+              {%- comment -%}
+                Whitespace control matters here: any newline between the name
+                and its superscripts renders as a visible space.
+              {%- endcomment -%}
+              <span class="pp__author">
+                {%- if author.url %}<a href="{{ author.url }}">{{ author.name }}</a>{% else %}{{ author.name }}{% endif -%}
+                {%- if show_marks and author.affiliations %}<span class="pp__mark">{{ author.affiliations | join: "," }}</span>{% endif -%}
+                {%- if author.equal %}<span class="pp__mark pp__mark--equal">*</span>{% endif -%}
+              </span>{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          </p>
+        {% endif %}
+
+        {% comment %}
+          Sits directly under the byline, next to the asterisks it explains,
+          rather than below the affiliation list.
+        {% endcomment %}
+        {% if page.author_note %}<p class="pp__note">{{ page.author_note }}</p>{% endif %}
+
+        {% if page.affiliations %}
+          <p class="pp__affiliations">
+            {% for affiliation in page.affiliations %}
+              <span class="pp__affiliation">{% if show_marks %}<span class="pp__mark">{{ forloop.index }}</span> {% endif %}{{ affiliation }}</span>
+            {% endfor %}
+          </p>
+        {% endif %}
+
+        {% comment %}
+          Venue sits under the byline, not above the title: the title is what
+          the reader came for, and the venue reads as a credential on the names
+          once they have it.
+        {% endcomment %}
+        {% if page.venue %}<p class="pp__venue">{% if page.venue_url %}<a href="{{ page.venue_url }}">{{ page.venue }}</a>{% else %}{{ page.venue }}{% endif %}</p>{% endif %}
+
+        {% if page.links %}
+          <nav class="pp__links">
+            {% for link in page.links %}
+              <a class="pp__link" href="{{ link.url }}">
+                {% case link.icon %}
+                  {% when "pdf" %}
+                    <svg viewBox="0 0 384 512" aria-hidden="true"><path d="M320 464c8.8 0 16-7.2 16-16V160H256c-17.7 0-32-14.3-32-32V48H64c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16H320zM0 64C0 28.7 28.7 0 64 0H229.5c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64z"/></svg>
+                  {% when "arxiv" %}
+                    {% comment %}
+                      The real arXiv mark, from Academicons -- already loaded
+                      site-wide by head/custom.html, which this layout includes.
+                    {% endcomment %}
+                    <i class="ai ai-arxiv" aria-hidden="true"></i>
+                  {% when "code" %}
+                    <svg viewBox="0 0 496 512" aria-hidden="true"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8z"/></svg>
+                  {% when "video" %}
+                    <svg viewBox="0 0 576 512" aria-hidden="true"><path d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6C15 167 15 256 15 256s0 89 11.3 131.9c6.3 23.7 24.8 42.3 48.3 48.6C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.9 48.3-48.6C561 345 561 256 561 256s0-89-11.3-131.9zM232 337V175l143 81-143 81z"/></svg>
+                  {% when "data" %}
+                    <svg viewBox="0 0 448 512" aria-hidden="true"><path d="M448 80v48c0 44.2-100.3 80-224 80S0 172.2 0 128V80C0 35.8 100.3 0 224 0S448 35.8 448 80zM393.2 214.7c20.8-7.4 39.9-16.9 54.8-28.6V288c0 44.2-100.3 80-224 80S0 332.2 0 288V186.1c14.9 11.8 34 21.2 54.8 28.6C99.7 230.7 159.5 240 224 240s124.3-9.3 169.2-25.3zM0 346.1c14.9 11.8 34 21.2 54.8 28.6C99.7 390.7 159.5 400 224 400s124.3-9.3 169.2-25.3c20.8-7.4 39.9-16.9 54.8-28.6V432c0 44.2-100.3 80-224 80S0 476.2 0 432V346.1z"/></svg>
+                  {% comment %}
+                    Wireframe cube: every face left open, so it reads as a 3D
+                    model rather than a solid box. Drawn with strokes, hence the
+                    --stroke class (see the CSS, which otherwise fills icons).
+                  {% endcomment %}
+                  {% when "models" %}
+                    <svg class="pp__link-icon--stroke" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 21 7.25v9.5L12 21.5 3 16.75v-9.5z"/><path d="M3 7.25 12 12l9-4.75"/><path d="M12 12v9.5"/></svg>
+                  {% when "poster" %}
+                    <svg viewBox="0 0 512 512" aria-hidden="true"><path d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM323.8 202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4 3.9-19.8 10.5l-87 127.6L170.7 297c-4.6-5.7-11.5-9-18.7-9s-14.2 3.3-18.7 9l-64 80c-5.8 7.2-6.9 17.1-2.9 25.4s12.4 13.6 21.6 13.6h96,64H424c8.9 0 17.1-4.9 21.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z"/></svg>
+                  {% else %}
+                    <svg viewBox="0 0 640 512" aria-hidden="true"><path d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z"/></svg>
+                {% endcase %}
+                {{ link.label }}
+              </a>
+            {% endfor %}
+          </nav>
+        {% endif %}
+      </header>
+
+      {% if page.teaser %}
+        <div class="pp__teaser">
+          {% if page.teaser.video %}
+            <video src="{{ page.teaser.video | prepend: base_path }}"{% if page.teaser.poster %} poster="{{ page.teaser.poster | prepend: base_path }}"{% endif %} autoplay loop muted playsinline></video>
+          {% elsif page.teaser.image %}
+            <img src="{{ page.teaser.image | prepend: base_path }}" alt="{{ page.teaser.alt | default: page.teaser.caption | default: page.title | escape }}">
+          {% endif %}
+          {% if page.teaser.caption %}<p class="pp__caption">{{ page.teaser.caption | markdownify | remove: "<p>" | remove: "</p>" }}</p>{% endif %}
+        </div>
+      {% endif %}
+
+      {% if page.highlights %}
+        <div class="pp__highlights">
+          {% for highlight in page.highlights %}
+            <div class="pp__highlight">
+              <span class="pp__highlight-value">{{ highlight.value }}</span>
+              <span class="pp__highlight-label">{{ highlight.label }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <main class="pp__body">
+        {{ content }}
+
+        {% comment %}
+          Rendered whenever the key is present, including when it holds an empty
+          string -- an empty citation box is a deliberate placeholder, so the
+          test is on nil rather than on emptiness.
+        {% endcomment %}
+        {% unless page.bibtex == nil %}
+          <h2 id="citation">Citation</h2>
+          <div class="pp__bibtex-wrap">
+            <pre class="pp__bibtex" id="pp-bibtex">{{ page.bibtex | strip }}</pre>
+            <button type="button" class="pp__copy" data-copy-target="pp-bibtex">Copy</button>
+          </div>
+        {% endunless %}
+      </main>
+
+      <footer class="pp__footer">
+        {% if page.acknowledgements %}<p>{{ page.acknowledgements | markdownify | remove: "<p>" | remove: "</p>" }}</p>{% endif %}
+        <p>&copy; {{ site.time | date: '%Y' }} {{ site.name | default: site.title }}</p>
+      </footer>
+
+    </div>
+
+    <script>
+      // Top-right "Other projects" menu. Closes on outside click and on Escape,
+      // and returns focus to the button so keyboard users don't lose their place.
+      (function () {
+        var btn = document.getElementById("pp-more-btn");
+        var menu = document.getElementById("pp-more-menu");
+        if (!btn || !menu) return;
+
+        function setOpen(open) {
+          menu.hidden = !open;
+          btn.setAttribute("aria-expanded", String(open));
+        }
+
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          setOpen(menu.hidden);
+        });
+
+        // Hover opens it too, but only where there is a real pointer -- on a
+        // touch screen `hover` never resolves and the tap would have to serve
+        // as both open and close.
+        if (window.matchMedia("(hover: hover)").matches) {
+          var container = btn.parentNode;
+          var closeTimer;
+          container.addEventListener("mouseenter", function () {
+            window.clearTimeout(closeTimer);
+            setOpen(true);
+          });
+          // The menu sits a few pixels below the button, so the pointer leaves
+          // the container while crossing that gap. The delay keeps the menu up
+          // long enough to reach it; re-entering cancels the close.
+          container.addEventListener("mouseleave", function () {
+            closeTimer = window.setTimeout(function () { setOpen(false); }, 220);
+          });
+        }
+
+        document.addEventListener("click", function (e) {
+          if (!menu.hidden && !menu.contains(e.target)) setOpen(false);
+        });
+
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && !menu.hidden) { setOpen(false); btn.focus(); }
+        });
+      })();
+    </script>
+
+    <script>
+      // Copy-to-clipboard for the citation box. The async Clipboard API needs a
+      // secure context (https, or localhost during development); the textarea
+      // fallback covers plain-http and older browsers.
+      document.querySelectorAll(".pp__copy").forEach(function (button) {
+        button.addEventListener("click", function () {
+          var source = document.getElementById(button.dataset.copyTarget);
+          if (!source) return;
+
+          var text = source.textContent;
+          var done = function () {
+            button.textContent = "Copied";
+            button.classList.add("is-copied");
+            window.setTimeout(function () {
+              button.textContent = "Copy";
+              button.classList.remove("is-copied");
+            }, 1600);
+          };
+
+          if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(done);
+            return;
+          }
+
+          var scratch = document.createElement("textarea");
+          scratch.value = text;
+          scratch.setAttribute("readonly", "");
+          scratch.style.position = "absolute";
+          scratch.style.left = "-9999px";
+          document.body.appendChild(scratch);
+          scratch.select();
+          try { document.execCommand("copy"); done(); } catch (e) { /* no-op */ }
+          document.body.removeChild(scratch);
+        });
+      });
+    </script>
+
+    {% include analytics.html %}
+  </body>
+</html>

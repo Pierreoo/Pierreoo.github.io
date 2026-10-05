@@ -6,5 +6,7 @@ header:
 category: conferences
 link: 'https://openaccess.thecvf.com/content/ICCV2023W/SHARP/html/Onghena_Rotation-Invariant_Hierarchical_Segmentation_on_Poincare_Ball_for_3D_Point_Cloud_ICCVW_2023_paper.html'
 date: 2023-12-25
-venue: 'IEEE/CVF International Conference on Computer Vision Workshops (ICCVW), Paris, France'
+venue: 'ICCVW 2023'
+venue_url: 'https://iccv2023.thecvf.com/'
+location: 'Paris, France'
 ---

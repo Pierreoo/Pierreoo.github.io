@@ -6,5 +6,6 @@ header:
 category: conferences
 link: 'https://ieeexplore.ieee.org/document/9882743'
 date: 2022-09-14
-venue: 'IEEE/WCCI International Conference on Fuzzy Systems (FUZZ-IEEE), Padua, Italy'
+venue: 'WCCI 2022'
+location: 'Padua, Italy'
 ---

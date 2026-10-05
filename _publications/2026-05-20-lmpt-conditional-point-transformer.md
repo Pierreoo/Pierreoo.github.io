@@ -4,7 +4,11 @@ authors: 'Matteo Bastico*, Pierre Onghena*, David Ryckelynck, Beatriz Marcotegui
 header:
   teaser: "lmpt.webp"
 category: conferences
-link: 'https://arxiv.org/abs/2602.02808'
+link: '/projects/lmpt/'
 date: 2026-05-20
-venue: 'IEEE International Symposium on Biomedical Imaging (ISBI), London, UK'
+venue: 'ISBI 2026'
+venue_url: 'https://biomedicalimaging.org/2026/'
+distinction: 'Oral'
+author_note: '* Equal contribution'
+location: 'London, UK'
 ---

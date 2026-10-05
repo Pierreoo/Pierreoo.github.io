@@ -2,10 +2,14 @@
    FOOTER
    ========================================================================== */
 
+/* Matches the footer on the project pages: no grey band, muted rather than
+   pale text, centred, and separated by a hairline rather than a block of
+   colour. The two footers say the same thing and should look the same. */
 .page__footer {
   @include clearfix;
-  background-color: var(--global-footer-bg-color);
-  color: var(--global-text-color-light);
+  background-color: transparent;
+  color: var(--global-text-color);
+  text-align: center;
 
   float: left;
   margin-left: 0;
@@ -22,15 +26,15 @@
           animation: intro 0.3s both;
   -webkit-animation-delay: 0.45s;
           animation-delay: 0.45s;
-  border-top: 1px solid var(--global-dark-border-color);
+  border-top: 1px solid var(--global-border-color);
 
   footer {
     @include clearfix;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 1em;
+    margin-top: 0;
     max-width: 100%;
-    padding: 0 1em 1em;
+    padding: 2em 1em 3em;
 
     @include breakpoint($x-large) {
       max-width: $page-max-width;
@@ -56,7 +60,12 @@
 
 .page__footer-copyright {
   font-family: $global-font-family;
-  font-size: $type-size-7;
+  /* An absolute size, not rem: this theme sets html to 20px at desktop while
+     the project pages inherit the browser's 16px, so the same rem value would
+     render larger here than there. 13.6px is what 0.85rem gives on those
+     pages, which is the size being matched. */
+  font-size: 13.6px;
+  opacity: 0.85;
 }
 
 .page__footer-follow {

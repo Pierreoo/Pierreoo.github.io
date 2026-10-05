@@ -34,8 +34,22 @@
     </h3>
     {% if post.authors %}
       {% capture author_self %}<strong>{{ site.author.name }}</strong>{% endcapture %}
-      <p class="pub-row__authors">{{ post.authors | replace: site.author.name, author_self }}</p>
+      <p class="pub-row__authors">{{ post.authors | replace: site.author.name, author_self | replace: '*', '<span class="pub-row__mark">*</span>' }}{% if post.author_note %}<span class="pub-row__note">{{ post.author_note | replace_first: '*', '<span class="pub-row__mark">*</span>' }}</span>{% endif %}</p>
     {% endif %}
-    <p class="pub-row__venue">{{ post.venue }}, {{ post.date | default: "1900-01-01" | date: "%Y" }}</p>
+    {% comment %}
+      Printed verbatim: the year lives in `venue` so a paper can state its
+      venue however it likes (e.g. "ISBI Oral 2026"). `date` still orders the
+      list.
+    {% endcomment %}
+    {% comment %}
+      Venue and year only, no location. That is the convention on publication
+      lists in this field -- jonbarron.info, matthewtancik.com, anttwo and
+      clementjambon all print venue + year and no city. `location` stays in each
+      paper's front matter, unrendered, if it is ever wanted back.
+    {% endcomment %}
+    <p class="pub-row__meta">
+      <span class="pub-row__venue">{% if post.venue_url %}<a href="{{ post.venue_url }}">{{ post.venue }}</a>{% else %}{{ post.venue }}{% endif %}</span>
+      {% if post.distinction %}<span class="pub-row__badge">{{ post.distinction }}</span>{% endif %}
+    </p>
   </div>
 </div>

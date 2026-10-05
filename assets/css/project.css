@@ -1,0 +1,623 @@
+/* ==========================================================================
+   Project pages (layout: project)
+
+   Self-contained stylesheet for standalone paper project pages. Deliberately
+   does NOT reuse main.css / _sass -- these pages are meant to look like a
+   conference project page, not like the rest of the site, so the two are kept
+   independent and neither can break the other.
+   ========================================================================== */
+
+/* The page is white in every viewing context: no dark-mode palette, and
+   `color-scheme: light` so the browser doesn't paint its own dark surfaces
+   behind scrollbars and controls. Every surface tint is neutral grey -- the
+   accent colour is reserved for text and rules, never for a background, so the
+   paper's own figures (all on white) sit flush with the page. */
+:root {
+  color-scheme: light;
+
+  --pp-bg: #ffffff;
+  --pp-bg-alt: #fafafa;
+  --pp-text: #1c1e21;
+  --pp-muted: #5c6470;
+  --pp-border: #e2e5ea;
+  --pp-accent: #1f4e79;
+  --pp-code-bg: #fafafa;
+  --pp-panel: #f5f5f5;
+  --pp-max: 980px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body.pp {
+  margin: 0;
+  padding: 0;
+  background: var(--pp-bg);
+  color: var(--pp-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.pp a {
+  color: var(--pp-accent);
+  text-decoration: none;
+}
+
+.pp a:hover,
+.pp a:focus {
+  text-decoration: underline;
+}
+
+.pp img,
+.pp video {
+  max-width: 100%;
+  height: auto;
+}
+
+.pp__wrap {
+  max-width: var(--pp-max);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* "Other projects" menu
+   ========================================================================== */
+
+/* Fixed, so it stays reachable while reading. z-index clears the citation
+   box's copy button, the only other stacked element on the page. */
+.pp__more {
+  position: fixed;
+  top: 2.75rem;
+  right: 3.75rem;
+  z-index: 20;
+}
+
+.pp__more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.35rem;
+  border: 1px solid var(--pp-border);
+  border-radius: 999px;
+  background: var(--pp-bg);
+  color: var(--pp-text);
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.pp__more-btn:hover,
+.pp__more-btn:focus-visible {
+  border-color: var(--pp-accent);
+  color: var(--pp-accent);
+}
+
+.pp__more-arrow {
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.15s ease;
+}
+
+.pp__more-btn[aria-expanded="true"] .pp__more-arrow {
+  transform: rotate(180deg);
+}
+
+.pp__more-menu {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  right: 0;
+  min-width: 17rem;
+  padding: 0.35rem;
+  border: 1px solid var(--pp-border);
+  border-radius: 10px;
+  background: var(--pp-bg);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+.pp__more-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 6px;
+}
+
+/* Fixed-width slot so every name starts at the same x, emoji or not. */
+.pp__more-icon {
+  flex: 0 0 1.5em;
+  font-size: 1.15rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.pp__more-text {
+  min-width: 0;
+}
+
+.pp a.pp__more-item:hover,
+.pp a.pp__more-item:focus-visible {
+  background: var(--pp-bg-alt);
+  text-decoration: none;
+}
+
+/* The link back to the site sits under a rule -- it is a different kind of
+   destination from the sibling papers above it. */
+.pp__more-item--home {
+  margin-top: 0.35rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--pp-border);
+  border-radius: 0 0 6px 6px;
+}
+
+.pp__more-name {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--pp-text);
+}
+
+.pp__more-venue {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.8rem;
+  color: var(--pp-muted);
+}
+
+/* On a phone the fixed button would sit over the title, so it scrolls with the
+   page instead of hovering. */
+@media (max-width: 640px) {
+  .pp__more {
+    position: absolute;
+  }
+}
+
+/* Title block
+   ========================================================================== */
+
+.pp__header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--pp-border);
+}
+
+/* Sits under the byline. No uppercase/letter-spacing treatment: that styling
+   suited a kicker above the title, but here it would compete with the author
+   names it follows. */
+.pp__venue {
+  margin: 1.25rem 0 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--pp-accent);
+}
+
+.pp__title {
+  margin: 0 0 1.25rem;
+  font-size: 2.9rem;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+@media (max-width: 640px) {
+  .pp__title {
+    font-size: 2.05rem;
+  }
+}
+
+.pp__authors {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+/* Authors are a flowing list, but each name + its markers must never break
+   across lines. */
+.pp__author {
+  display: inline-block;
+  margin: 0 0.35rem;
+  white-space: nowrap;
+}
+
+.pp__mark {
+  font-size: 0.75em;
+  vertical-align: super;
+  color: var(--pp-muted);
+}
+
+/* The equal-contribution asterisk carries meaning the affiliation numbers
+   don't, so it is set in the accent colour and bolder -- and the note below
+   matches it, which is what links the two for the reader. */
+.pp__mark--equal {
+  font-size: 0.95em;
+  font-weight: 700;
+  color: var(--pp-accent);
+}
+
+.pp__affiliations {
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+  color: var(--pp-muted);
+}
+
+/* One affiliation per line, numbered or not -- a row of centres run together
+   inline is hard to scan back to the superscript on a name. */
+.pp__affiliation {
+  display: block;
+  margin: 0;
+}
+
+.pp__note {
+  margin: 0 0 0.6rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--pp-accent);
+}
+
+/* Link buttons
+   ========================================================================== */
+
+.pp__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 1.25rem 0 0;
+}
+
+/* Outlined rather than filled: solid dark pills read as heavy blocks on a page
+   this white, and the figures below are all on white too. The border carries
+   the shape; the accent colour arrives only on hover. */
+.pp__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.3rem;
+  border: 1px solid var(--pp-border);
+  border-radius: 999px;
+  background: var(--pp-bg);
+  color: var(--pp-text);
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+
+/* Qualified with `a` to outrank the page-wide `.pp a:hover` underline, which is
+   otherwise the more specific selector and would draw a rule under the label. */
+.pp a.pp__link:hover,
+.pp a.pp__link:focus {
+  border-color: var(--pp-accent);
+  background: var(--pp-bg-alt);
+  color: var(--pp-accent);
+  text-decoration: none;
+}
+
+.pp__link svg {
+  width: 1.05em;
+  height: 1.05em;
+  fill: currentColor;
+  flex: 0 0 auto;
+}
+
+/* Outline icons: no fill, the shape is carried by the strokes. Needs to beat
+   the `fill: currentColor` above, which a presentation attribute on the SVG
+   would not. */
+.pp__link svg.pp__link-icon--stroke {
+  /* Larger than the filled icons: the artwork only spans 75% of this viewBox,
+     and an outline reads lighter than a solid shape at the same size. */
+  width: 1.35em;
+  height: 1.35em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* Academicons glyphs (the arXiv mark) are font characters rather than SVG, so
+   they need their own sizing to sit at the same weight as the drawn icons.
+   Centring the box is not enough: the glyph's ink sits high within its em box,
+   about 0.1em above where the SVG icons centre, so it is nudged back down. */
+.pp__link .ai {
+  position: relative;
+  top: 0.1em;
+  font-size: 1.2em;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
+/* Teaser
+   ========================================================================== */
+
+.pp__teaser {
+  margin: 2.5rem 0 0;
+  text-align: center;
+}
+
+/* A wide teaser fills the column; a tall or square one is capped in height so
+   it stays in proportion with the column rather than towering over it. The
+   fixed cap keeps it consistent across screens, with the vh term as a guard on
+   short viewports. */
+.pp__teaser img,
+.pp__teaser video {
+  max-width: 100%;
+  max-height: min(30rem, 80vh);
+}
+
+/* Capped and centred, so a caption sits in from the column edges rather than
+   running its full width. 880px is the narrowest measure that still sets the
+   longer Method Overview caption on two lines at 1rem. Kept in step with
+   .pp__body figcaption -- both are the same kind of text. */
+.pp__caption {
+  margin: 0.75rem auto 0;
+  max-width: 880px;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--pp-muted);
+}
+
+/* Highlights strip
+   ========================================================================== */
+
+.pp__highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1px;
+  margin: 2.5rem 0 0;
+  background: var(--pp-border);
+  border: 1px solid var(--pp-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pp__highlight {
+  padding: 1.25rem 1rem;
+  background: var(--pp-bg-alt);
+  text-align: center;
+}
+
+.pp__highlight-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--pp-accent);
+}
+
+.pp__highlight-label {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--pp-muted);
+}
+
+/* Body content
+   ========================================================================== */
+
+.pp__body {
+  padding: 1rem 0 0;
+}
+
+/* Section titles are centred, matching the Abstract heading inside its panel
+   and the header block above. */
+.pp__body h2 {
+  margin: 3rem 0 1rem;
+  font-size: 1.6rem;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+.pp__body h3 {
+  margin: 2rem 0 0.6rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.pp__body p {
+  margin: 0 0 1.1rem;
+}
+
+.pp__body ul,
+.pp__body ol {
+  margin: 0 0 1.1rem;
+  padding-left: 1.4rem;
+}
+
+.pp__body li {
+  margin-bottom: 0.4rem;
+}
+
+.pp__body blockquote {
+  margin: 1.5rem 0;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 3px solid var(--pp-accent);
+  background: var(--pp-bg);
+  color: var(--pp-text);
+  font-size: 1.1rem;
+  line-height: 1.55;
+}
+
+.pp__body blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* Abstract panel
+   ========================================================================== */
+
+.pp__abstract {
+  margin: 2.5rem 0 0;
+  padding: 2.25rem 2.5rem;
+  background: var(--pp-panel);
+  border-radius: 10px;
+}
+
+.pp__abstract h2 {
+  margin-top: 0;
+}
+
+/* Justified, as on a printed abstract. Hyphenation is what keeps justification
+   from opening rivers of whitespace in a narrow column. */
+.pp__abstract p {
+  margin-bottom: 0;
+  text-align: justify;
+  hyphens: auto;
+}
+
+@media (max-width: 640px) {
+  .pp__abstract {
+    padding: 1.5rem 1.25rem;
+  }
+}
+
+/* Figures inside the body. Deliberately unframed: every figure is rendered from
+   the paper on a white ground, so a border would draw a box around whitespace
+   rather than around the artwork. Wide content scrolls inside its own box so
+   the page itself never scrolls sideways. */
+.pp__body figure {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+/* Same treatment as the teaser: a wide diagram fills the column, a tall one is
+   capped so it stays in proportion with the other figures on the page rather
+   than becoming a full-screen block. */
+.pp__body figure img,
+.pp__body figure video {
+  max-height: min(33rem, 80vh);
+}
+
+/* Matches .pp__caption: both captions are the same kind of text and must read
+   at the same size. */
+.pp__body figcaption {
+  margin: 0.7rem auto 0;
+  max-width: 880px;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--pp-muted);
+}
+
+.pp__body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.pp__table-scroll {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.pp__body th,
+.pp__body td {
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid var(--pp-border);
+  text-align: left;
+}
+
+.pp__body th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Video embeds keep a 16:9 box so they don't jump on load. */
+.pp__embed {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  margin: 2rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--pp-border);
+}
+
+.pp__embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* BibTeX
+   ========================================================================== */
+
+.pp__bibtex-wrap {
+  position: relative;
+}
+
+/* Inside the box, pinned to its top-right corner, at the box's own padding --
+   so a long citation line does pass behind it. That is deliberate: the button
+   is opaque and painted above (z-index), so the line is masked rather than
+   colliding with the label, the way a code-block copy button normally behaves. */
+.pp__copy {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  z-index: 1;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--pp-border);
+  border-radius: 6px;
+  background: var(--pp-bg);
+  color: var(--pp-muted);
+  font-family: inherit;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.pp__copy:hover,
+.pp__copy:focus-visible,
+.pp__copy.is-copied {
+  border-color: var(--pp-accent);
+  color: var(--pp-accent);
+}
+
+/* min-height keeps the box a visible panel while a citation is still empty. */
+.pp__bibtex {
+  min-height: 5rem;
+  margin: 0;
+  padding: 1.1rem 1.25rem;
+  background: var(--pp-code-bg);
+  border: 1px solid var(--pp-border);
+  border-radius: 8px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  white-space: pre;
+  overflow-x: auto;
+  tab-size: 2;
+}
+
+/* Footer
+   ========================================================================== */
+
+.pp__footer {
+  margin-top: 4rem;
+  padding: 2rem 0 3rem;
+  border-top: 1px solid var(--pp-border);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--pp-muted);
+  text-align: center;
+}
+
+.pp__footer p {
+  margin: 0 0 0.5rem;
+}
