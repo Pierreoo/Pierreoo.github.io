@@ -1,0 +1,66 @@
+{% include base_path %}
+
+<div class="pub-row">
+  {% if post.header.teaser %}
+    {% capture teaser_img %}<img src=
+        {% if post.header.teaser contains "://" %}
+          "{{ post.header.teaser }}"
+        {% else %}
+          "{{ post.header.teaser | prepend: "/images/" | prepend: base_path }}"
+        {% endif %}
+        alt="" width="240" height="310" loading="lazy">{% endcapture %}
+    <div class="pub-row__thumb">
+      {% if post.link %}
+        <a href="{{ post.link }}" tabindex="-1" aria-hidden="true">{{ teaser_img }}</a>
+      {% else %}
+        {{ teaser_img }}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="pub-row__body">
+    <h3 class="pub-row__title">
+      {% if post.link %}<a href="{{ post.link }}">{{ post.title }}</a>{% else %}{{ post.title }}{% endif %}
+    </h3>
+    {% if post.authors %}
+      {% capture author_self %}<strong>{{ site.author.name }}</strong>{% endcapture %}
+      {% assign authors_html = post.authors %}
+      {% if post.authors_break %}
+        {% capture break_at %}, {{ post.authors_break }}{% endcapture %}
+        {% capture break_with %},<br class="pub-row__break"> {{ post.authors_break }}{% endcapture %}
+        {% assign authors_html = authors_html | replace_first: break_at, break_with %}
+      {% endif %}
+      {% assign note_mark = post.author_note | slice: 0 %}
+      {% if note_mark == '*' %}
+        {% assign note_text = post.author_note | remove_first: '*' | strip %}
+        {% capture author_mark %}<span class="pub-row__mark" aria-hidden="true">*</span><span class="visually-hidden"> ({{ note_text | downcase }})</span>{% endcapture %}
+      {% else %}
+        {% assign note_text = post.author_note %}
+        {% capture author_mark %}<span class="pub-row__mark">*</span>{% endcapture %}
+      {% endif %}
+      <p class="pub-row__authors">{{ authors_html | replace: site.author.name, author_self | replace: '*', author_mark }}{% if post.author_note %}<span class="pub-row__note"{% if note_mark == '*' %} aria-hidden="true"><span class="pub-row__mark">*</span>{% else %}>{% endif %}{{ note_text }}</span>{% endif %}</p>
+    {% endif %}
+    {% assign venue_words = post.venue | split: ' ' %}
+    {% assign venue_year = venue_words | last %}
+    {% assign venue_year_num = venue_year | plus: 0 %}
+    {% if venue_words.size > 1 and venue_year_num > 999 %}
+      {% assign venue_name_size = post.venue.size | minus: venue_year.size | minus: 1 %}
+      {% capture venue_label %}{{ post.venue | slice: 0, venue_name_size }} <span class="pub-row__venue-year">{{ venue_year }}</span>{% endcapture %}
+    {% else %}
+      {% assign venue_label = post.venue %}
+    {% endif %}
+    <p class="pub-row__meta">
+      <span class="pub-row__venue">{% if post.venue_url %}<a href="{{ post.venue_url }}">{{ venue_label }}</a>{% else %}<span>{{ venue_label }}</span>{% endif %}</span>
+      {% if post.distinction %}
+        {% assign distinction_key = post.distinction | downcase %}
+        <span class="pub-row__badge"><i class="fa-solid {% if distinction_key contains 'oral' %}fa-microphone{% else %}fa-award{% endif %}" aria-hidden="true"></i><span>{{ post.distinction }}</span></span>
+      {% endif %}
+    </p>
+    {% if post.link %}
+      {% assign link_root = post.link | slice: 0, 10 %}
+      <p class="pub-row__actions">
+        <a href="{{ post.link }}">{% if link_root == "/projects/" %}Project Page{% else %}Read Paper{% endif %}<span class="visually-hidden">: {{ post.title }}</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+      </p>
+    {% endif %}
+  </div>
+</div>

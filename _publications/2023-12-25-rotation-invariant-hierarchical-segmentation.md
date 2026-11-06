@@ -1,0 +1,12 @@
+---
+title: "Rotation-invariant Hierarchical Segmentation on Poincaré Ball for 3D Point Cloud"
+authors: 'Pierre Onghena, Leonardo Gigli, Santiago Velasco-Forero'
+header:
+  teaser: "papers/rotation_invariant.webp"
+category: conferences
+link: 'https://openaccess.thecvf.com/content/ICCV2023W/SHARP/html/Onghena_Rotation-Invariant_Hierarchical_Segmentation_on_Poincare_Ball_for_3D_Point_Cloud_ICCVW_2023_paper.html'
+date: 2023-12-25
+venue: 'ICCVW 2023'
+venue_url: 'https://iccv2023.thecvf.com/'
+location: 'Paris, France'
+---

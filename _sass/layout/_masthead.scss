@@ -1,0 +1,165 @@
+/* ==========================================================================
+   MASTHEAD
+   ========================================================================== */
+
+$masthead-bar-height: 64px;
+$masthead-bar-height-small: 58px;
+$masthead-button-size: 40px;
+$masthead-button-size-small: 38px;
+$masthead-indicator: linear-gradient(90deg, var(--global-link-color), $availability-violet);
+
+body {
+  padding-top: $masthead-bar-height-small;
+
+  @include breakpoint($medium) {
+    padding-top: $masthead-bar-height;
+  }
+}
+
+.masthead {
+  --masthead-bar: #{$masthead-bar-height-small};
+  --masthead-button: #{$masthead-button-size-small};
+  --masthead-ink: color-mix(in srgb, var(--global-text-color) 80%, var(--global-bg-color));
+  --masthead-chip-border: color-mix(in srgb, var(--global-text-color) 12%, var(--global-bg-color));
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: fit-content;
+  background: var(--global-bg-color);
+  box-shadow: 0 1px 0 var(--global-border-color);
+  transition: box-shadow 0.3s ease;
+
+  -webkit-animation: intro 0.3s both;
+          animation: intro 0.3s both;
+  -webkit-animation-delay: 0.15s;
+          animation-delay: 0.15s;
+  z-index: 20;
+
+  @include breakpoint($medium) {
+    --masthead-bar: #{$masthead-bar-height};
+    --masthead-button: #{$masthead-button-size};
+  }
+
+  @supports (background: color-mix(in srgb, red 50%, transparent)) {
+    background: color-mix(in srgb, var(--global-bg-color) 86%, transparent);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+            backdrop-filter: saturate(180%) blur(16px);
+  }
+
+  &.is-scrolled {
+    box-shadow: 0 1px 0 var(--global-border-color), 0 12px 32px -20px rgba(16, 24, 40, 0.4);
+  }
+
+  html[data-theme="dark"] &.is-scrolled {
+    box-shadow: 0 1px 0 var(--global-border-color), 0 12px 32px -16px rgba(0, 0, 0, 0.75);
+  }
+
+  &__inner-wrap {
+    @include container;
+    @include clearfix;
+    padding: 0 1em;
+    font-family: $sans-serif-narrow;
+
+    @include breakpoint($x-large) {
+      max-width: $page-max-width;
+    }
+
+    a {
+      text-decoration: none;
+    }
+  }
+}
+
+.masthead__menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    clear: both;
+    list-style-type: none;
+  }
+}
+
+.masthead__menu-item {
+  display: block;
+  list-style-type: none;
+  white-space: nowrap;
+}
+
+.masthead__actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+
+  .masthead__menu:has(.greedy-nav > button:not(.hidden)) & {
+    margin-right: calc(var(--masthead-button) + 8px);
+  }
+}
+
+.masthead__icon {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.masthead__toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--masthead-button);
+  height: var(--masthead-button);
+  padding: 0;
+  border: 1px solid var(--masthead-chip-border);
+  border-radius: 50%;
+  background: var(--global-bg-color);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  color: var(--masthead-ink);
+  cursor: pointer;
+  transition: $global-transition;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--global-link-color);
+    box-shadow: 0 6px 16px -4px color-mix(in srgb, var(--global-link-color) 45%, transparent);
+    color: var(--global-text-color);
+  }
+
+  .masthead__icon {
+    position: absolute;
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease;
+  }
+
+  .masthead__icon--moon {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+  }
+
+  html[data-theme="dark"] & {
+    .masthead__icon--sun {
+      opacity: 0;
+      transform: rotate(90deg) scale(0.5);
+    }
+
+    .masthead__icon--moon {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .masthead__icon {
+      transition: none;
+    }
+  }
+}

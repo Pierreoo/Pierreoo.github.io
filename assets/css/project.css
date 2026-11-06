@@ -1,0 +1,604 @@
+:root {
+  color-scheme: light;
+
+  --pp-bg: #ffffff;
+  --pp-bg-alt: #fafafa;
+  --pp-text: #1c1e21;
+  --pp-muted: #5c6470;
+  --pp-border: #e2e5ea;
+  --pp-accent: #1f4e79;
+  --pp-code-bg: #fafafa;
+  --pp-panel: #f5f5f5;
+  --pp-max: 980px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body.pp {
+  margin: 0;
+  padding: 0;
+  background: var(--pp-bg);
+  color: var(--pp-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.pp a {
+  color: var(--pp-accent);
+  text-decoration: none;
+}
+
+.pp a:hover,
+.pp a:focus {
+  text-decoration: underline;
+}
+
+.pp img,
+.pp video {
+  max-width: 100%;
+  height: auto;
+}
+
+.pp__wrap {
+  max-width: var(--pp-max);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.pp__more {
+  position: fixed;
+  top: 2.75rem;
+  right: 3.75rem;
+  z-index: 20;
+}
+
+.pp__more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.35rem;
+  border: 1px solid var(--pp-border);
+  border-radius: 999px;
+  background: var(--pp-bg);
+  color: var(--pp-text);
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.pp__more-btn:hover,
+.pp__more-btn:focus-visible {
+  border-color: var(--pp-accent);
+  color: var(--pp-accent);
+}
+
+.pp__more-arrow {
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.15s ease;
+}
+
+.pp__more-btn[aria-expanded="true"] .pp__more-arrow {
+  transform: rotate(180deg);
+}
+
+.pp__more-menu {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  right: 0;
+  min-width: 17rem;
+  padding: 0.35rem;
+  border: 1px solid var(--pp-border);
+  border-radius: 10px;
+  background: var(--pp-bg);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+.pp__more-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 6px;
+}
+
+.pp__more-icon {
+  flex: 0 0 1.5em;
+  font-size: 1.15rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.pp__more-text {
+  min-width: 0;
+}
+
+.pp a.pp__more-item:hover,
+.pp a.pp__more-item:focus-visible {
+  background: var(--pp-bg-alt);
+  text-decoration: none;
+}
+
+.pp__more-item--home {
+  margin-top: 0.35rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--pp-border);
+  border-radius: 0 0 6px 6px;
+}
+
+.pp__more-name {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--pp-text);
+}
+
+.pp__more-venue {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.8rem;
+  color: var(--pp-muted);
+}
+
+@media (max-width: 640px), (max-height: 500px) {
+  .pp__more {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+  }
+}
+
+.pp__header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid var(--pp-border);
+}
+
+@media (max-width: 1480px) {
+  .pp__header {
+    padding-top: 6.5rem;
+  }
+}
+
+@media (max-width: 640px), (max-height: 500px) {
+  .pp__header {
+    padding-top: 5rem;
+  }
+}
+
+.pp__venue {
+  margin: 1.25rem 0 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--pp-accent);
+}
+
+.pp__title {
+  margin: 0 0 1.25rem;
+  font-size: 2.9rem;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.pp__authors {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+.pp__author {
+  display: inline-block;
+  margin: 0 0.175rem;
+  white-space: nowrap;
+}
+
+.pp__mark {
+  font-size: 0.75em;
+  vertical-align: super;
+  color: var(--pp-muted);
+}
+
+.pp__mark--equal {
+  font-size: 0.95em;
+  font-weight: 700;
+  color: var(--pp-accent);
+}
+
+.pp__affiliations {
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+  color: var(--pp-muted);
+}
+
+.pp__affiliation {
+  display: block;
+  margin: 0;
+}
+
+.pp__note {
+  margin: 0 0 0.6rem;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--pp-muted);
+}
+
+.pp__note .pp__mark--equal {
+  position: relative;
+  top: -0.4em;
+  margin-right: 0.08em;
+  font-style: normal;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+.pp__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .pp__title {
+    font-size: clamp(1.5rem, 6.4vw, 2.05rem);
+  }
+
+  .pp__authors {
+    font-size: 1.1rem;
+  }
+
+  .pp__affiliations {
+    font-size: 1rem;
+  }
+}
+
+.pp__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 1.25rem 0 0;
+}
+
+.pp__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.3rem;
+  border: 1px solid var(--pp-border);
+  border-radius: 999px;
+  background: var(--pp-bg);
+  color: var(--pp-text);
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+
+.pp a.pp__link:hover,
+.pp a.pp__link:focus {
+  border-color: var(--pp-accent);
+  background: var(--pp-bg-alt);
+  color: var(--pp-accent);
+  text-decoration: none;
+}
+
+.pp__link svg {
+  width: 1.05em;
+  height: 1.05em;
+  fill: currentColor;
+  flex: 0 0 auto;
+}
+
+.pp__link svg.pp__link-icon--stroke {
+  width: 1.35em;
+  height: 1.35em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.pp__link .ai {
+  position: relative;
+  top: 0.1em;
+  font-size: 1.2em;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 640px) {
+  .pp__links {
+    gap: 0.5rem;
+  }
+
+  .pp__link {
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    font-size: 1rem;
+  }
+
+  .pp__links:has(> .pp__link:nth-child(4)) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: fit-content;
+    margin-inline: auto;
+  }
+
+  .pp__links:has(> .pp__link:nth-child(4)) .pp__link {
+    justify-content: center;
+  }
+}
+
+.pp__teaser {
+  margin: 2.5rem 0 0;
+  text-align: center;
+}
+
+.pp__teaser img,
+.pp__teaser video {
+  max-width: 100%;
+  max-height: min(30rem, 80vh);
+}
+
+.pp__caption {
+  margin: 0.75rem auto 0;
+  max-width: 880px;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--pp-muted);
+}
+
+.pp__highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  margin: 2.5rem 0 0;
+  background: var(--pp-border);
+  border: 1px solid var(--pp-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pp__highlight {
+  flex: 1 1 160px;
+  padding: 1.25rem 1rem;
+  background: var(--pp-bg-alt);
+  text-align: center;
+}
+
+.pp__highlight-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--pp-accent);
+}
+
+.pp__highlight-label {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--pp-muted);
+}
+
+.pp__body {
+  padding: 1rem 0 0;
+}
+
+.pp__body h2 {
+  margin: 3rem 0 1rem;
+  font-size: 1.6rem;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+.pp__body h3 {
+  margin: 2rem 0 0.6rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.pp__body p {
+  margin: 0 0 1.1rem;
+}
+
+.pp__body ul,
+.pp__body ol {
+  margin: 0 0 1.1rem;
+  padding-left: 1.4rem;
+}
+
+.pp__body li {
+  margin-bottom: 0.4rem;
+}
+
+.pp__body blockquote {
+  margin: 1.5rem 0;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 3px solid var(--pp-accent);
+  background: var(--pp-bg);
+  color: var(--pp-text);
+  font-size: 1.1rem;
+  line-height: 1.55;
+}
+
+.pp__body blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.pp__abstract {
+  margin: 2.5rem 0 0;
+  padding: 2.25rem 2.5rem;
+  background: var(--pp-panel);
+  border-radius: 10px;
+}
+
+.pp__abstract h2 {
+  margin-top: 0;
+}
+
+.pp__abstract p {
+  margin-bottom: 0;
+  text-align: justify;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+@media (max-width: 640px) {
+  .pp__abstract {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .pp__abstract p {
+    text-align: left;
+  }
+}
+
+.pp__body figure {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.pp__body figure img,
+.pp__body figure video {
+  max-height: min(33rem, 80vh);
+}
+
+.pp__body figcaption {
+  margin: 0.7rem auto 0;
+  max-width: 880px;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--pp-muted);
+}
+
+.pp__body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.pp__table-scroll {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.pp__body th,
+.pp__body td {
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid var(--pp-border);
+  text-align: left;
+}
+
+.pp__body th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pp__embed {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  margin: 2rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--pp-border);
+}
+
+.pp__embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.pp__bibtex-wrap {
+  position: relative;
+}
+
+.pp__copy {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  z-index: 1;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--pp-border);
+  border-radius: 6px;
+  background: var(--pp-bg);
+  color: var(--pp-muted);
+  font-family: inherit;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.pp__copy:hover,
+.pp__copy:focus-visible,
+.pp__copy.is-copied {
+  border-color: var(--pp-accent);
+  color: var(--pp-accent);
+}
+
+.pp__bibtex {
+  min-height: 5rem;
+  margin: 0;
+  padding: 1.1rem 1.25rem;
+  background: var(--pp-code-bg);
+  border: 1px solid var(--pp-border);
+  border-radius: 8px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  white-space: pre;
+  overflow-x: auto;
+  tab-size: 2;
+}
+
+@media (max-width: 640px) {
+  .pp__bibtex {
+    padding-top: 3rem;
+  }
+}
+
+.pp__footer {
+  margin-top: 4rem;
+  padding: 2rem 0 3rem;
+  border-top: 1px solid var(--pp-border);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--pp-muted);
+  text-align: center;
+}
+
+.pp__footer p {
+  margin: 0 0 0.5rem;
+}
+
+.pp__footer .pp__footer-link {
+  color: inherit;
+}
