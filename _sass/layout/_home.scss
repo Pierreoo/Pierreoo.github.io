@@ -14,9 +14,14 @@
 
 $availability-pad-y: 0.85em;
 $availability-dot: 0.6em;
+$availability-ink: #0b1220;
 
 .page__content .availability {
   position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75em 1.25em;
   font-size: 0.9em;
   max-width: 50em;
   margin: 1.2em 0 0;
@@ -54,6 +59,76 @@ $availability-dot: 0.6em;
       color: var(--global-link-color-hover);
       text-decoration: none;
     }
+  }
+
+  .availability__text {
+    flex: 1 1 18em;
+  }
+
+  .availability__cv {
+    --cv-tint: 5%;
+    --cv-ink: color-mix(in srgb, var(--global-link-color) 66%, #{$availability-ink});
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 7px;
+    height: 40px;
+    padding: 0 16px 0 13px;
+    border: 1.5px solid transparent;
+    border-radius: 999px;
+    background:
+      linear-gradient(
+        115deg,
+        color-mix(in srgb, var(--global-link-color) var(--cv-tint), var(--global-bg-color)),
+        color-mix(in srgb, #{$availability-violet} var(--cv-tint), var(--global-bg-color))
+      ) padding-box,
+      linear-gradient(115deg, var(--global-link-color), $availability-violet) border-box;
+    box-shadow: 0 4px 14px -6px color-mix(in srgb, var(--global-link-color) 55%, transparent);
+    color: var(--cv-ink);
+    font-size: max(15px, 0.85rem);
+    font-weight: 600;
+    letter-spacing: 0.005em;
+    transition: $global-transition;
+
+    > span {
+      text-box: trim-both cap alphabetic;
+    }
+
+    &:focus {
+      color: var(--cv-ink);
+    }
+
+    &:hover,
+    &:focus-visible {
+      --cv-tint: 12%;
+      --cv-ink: color-mix(in srgb, var(--global-link-color) 50%, #{$availability-ink});
+      box-shadow: 0 8px 20px -8px color-mix(in srgb, $availability-violet 60%, transparent);
+      color: var(--cv-ink);
+      transform: translateY(-1px);
+    }
+
+    html[data-theme="dark"] & {
+      --cv-tint: 12%;
+      --cv-ink: color-mix(in srgb, var(--global-link-color) 85%, #fff);
+      box-shadow: 0 4px 14px -6px rgba(0, 0, 0, 0.6);
+
+      &:hover,
+      &:focus-visible {
+        --cv-tint: 20%;
+        --cv-ink: #fff;
+        box-shadow: 0 8px 20px -8px color-mix(in srgb, $availability-violet 55%, transparent);
+      }
+    }
+  }
+
+  .availability__icon {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   @media (prefers-reduced-motion: reduce) {

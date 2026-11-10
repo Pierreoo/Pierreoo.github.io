@@ -380,6 +380,10 @@ $author-logo-size: 22px;
     &--orcid {
       --chip-ring: #{$orcid-color};
     }
+
+    &--linkedin {
+      --chip-ring: #{$linkedin-color};
+    }
   }
 
   .author__logo {
@@ -394,6 +398,10 @@ $author-logo-size: 22px;
     &--researchgate {
       height: $author-logo-size - 3px;
       color: $researchgate-color;
+    }
+
+    &--linkedin {
+      height: $author-logo-size - 2px;
     }
   }
 

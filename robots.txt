@@ -1,1 +1,4 @@
+User-agent: *
+Disallow: /Pierre_Onghena_CV.pdf
+
 Sitemap: https://pierreoo.github.io/sitemap.xml

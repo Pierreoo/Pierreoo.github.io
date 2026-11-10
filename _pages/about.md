@@ -16,7 +16,7 @@ redirect_from:
 I am a PhD candidate at the Centre for Statistics and Images of Mines Paris – PSL, where I focus on deep learning, geometry, and 3D computer vision.
 Alongside my research, I teach mathematics and statistics at ESCP Business School, and previously worked as a data engineer at IBM.
 
-<p class="availability"><strong>I will complete my PhD by the end of 2026</strong> and am open to exploring future opportunities.<br>Please feel free to <a href="mailto:{{ site.author.email }}">get in touch</a>.</p>
+<p class="availability"><span class="availability__text"><strong>I will complete my PhD by the end of 2026</strong> and am open to exploring future opportunities.<br>Please feel free to <a href="mailto:{{ site.author.email }}">get in touch</a>.</span><a class="availability__cv" href="{{ '/Pierre_Onghena_CV.pdf' | relative_url }}" target="_blank" rel="noopener">{% include icons/file.svg %}<span>CV</span></a></p>
 
 
 <div class="home-section" id="publications">

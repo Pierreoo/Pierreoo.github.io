@@ -112,6 +112,12 @@
     font-size: $type-size-6;
   }
 
+  .page__updated {
+    margin-top: 2em;
+    color: color-mix(in srgb, var(--global-text-color) 80%, var(--global-bg-color));
+    font-size: 0.9em;
+  }
+
   /* blockquote citations */
   blockquote + .small {
     margin-top: -1.5em;
