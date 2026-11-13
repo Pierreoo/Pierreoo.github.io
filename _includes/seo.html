@@ -95,6 +95,9 @@
       "@type" : "{% if site.social.type %}{{ site.social.type }}{% else %}Person{% endif %}",
       "name" : "{{ site.social.name | default: site.name }}",
       "url" : {{ seo_url | jsonify }},
+      {% if site.author.avatar %}
+      "image" : {{ site.author.avatar | prepend: "/images/" | prepend: seo_url | jsonify }},
+      {% endif %}
       {% if site.social.job_title %}
       "jobTitle" : {{ site.social.job_title | jsonify }},
       {% endif %}

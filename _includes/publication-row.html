@@ -30,15 +30,14 @@
         {% capture break_with %},<br class="pub-row__break"> {{ post.authors_break }}{% endcapture %}
         {% assign authors_html = authors_html | replace_first: break_at, break_with %}
       {% endif %}
+      {% capture author_mark %}<span class="pub-row__mark">*</span>{% endcapture %}
       {% assign note_mark = post.author_note | slice: 0 %}
       {% if note_mark == '*' %}
         {% assign note_text = post.author_note | remove_first: '*' | strip %}
-        {% capture author_mark %}<span class="pub-row__mark" aria-hidden="true">*</span><span class="visually-hidden"> ({{ note_text | downcase }})</span>{% endcapture %}
       {% else %}
         {% assign note_text = post.author_note %}
-        {% capture author_mark %}<span class="pub-row__mark">*</span>{% endcapture %}
       {% endif %}
-      <p class="pub-row__authors">{{ authors_html | replace: site.author.name, author_self | replace: '*', author_mark }}{% if post.author_note %}<span class="pub-row__note"{% if note_mark == '*' %} aria-hidden="true"><span class="pub-row__mark">*</span>{% else %}>{% endif %}{{ note_text }}</span>{% endif %}</p>
+      <p class="pub-row__authors">{{ authors_html | replace: site.author.name, author_self | replace: '*', author_mark }}{% if post.author_note %}<span class="pub-row__note"> {% if note_mark == '*' %}{{ author_mark }}{% endif %}{{ note_text }}</span>{% endif %}</p>
     {% endif %}
     {% assign venue_words = post.venue | split: ' ' %}
     {% assign venue_year = venue_words | last %}

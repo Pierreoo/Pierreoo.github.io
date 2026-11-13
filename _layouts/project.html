@@ -87,14 +87,14 @@ layout: compress
               <span class="pp__author">
                 {%- if author.url %}<a href="{{ author.url }}">{{ author.name }}</a>{% else %}{{ author.name }}{% endif -%}
                 {%- if show_marks and author.affiliations %}<span class="pp__mark">{{ author.affiliations | join: "," }}</span>{% endif -%}
-                {%- if author.equal %}{% if note_mark == '*' %}<span class="pp__mark pp__mark--equal" aria-hidden="true">*</span><span class="pp__sr"> ({{ note_text | downcase }})</span>{% else %}<span class="pp__mark pp__mark--equal">*</span>{% endif %}{% endif -%}
+                {%- if author.equal %}<span class="pp__mark pp__mark--equal">*</span>{% endif -%}
                 {%- unless forloop.last %},{% endunless -%}
               </span>
             {% endfor %}
           </p>
         {% endif %}
 
-        {% if page.author_note %}<p class="pp__note"{% if note_mark == '*' %} aria-hidden="true"><span class="pp__mark pp__mark--equal">*</span>{% else %}>{% endif %}{{ note_text }}</p>{% endif %}
+        {% if page.author_note %}<p class="pp__note">{% if note_mark == '*' %}<span class="pp__mark pp__mark--equal">*</span>{% endif %}{{ note_text }}</p>{% endif %}
 
         {% if page.affiliations %}
           <p class="pp__affiliations">

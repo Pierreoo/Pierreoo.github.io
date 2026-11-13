@@ -411,14 +411,27 @@ $author-logo-size: 22px;
   }
 }
 
-$author-photo-size: 140px;
-$author-photo-gap: 24px;
+$author-photo-width: 169px;
+$author-photo-height: 225px;
+$author-photo-stacked-size: 140px;
+$author-photo-gap: 40px;
 $author-photo-pull: 16px;
+$author-photo-cap: 9px;
+$author-photo-radius: 12px;
 
-.page--author-header .page__content {
+.home-intro {
+  .home-bio {
+    max-width: 45em;
+  }
+
   @include breakpoint($large) {
     position: relative;
-    padding-left: $author-photo-size - $author-photo-pull + $author-photo-gap;
+    margin-left: -$author-photo-pull;
+
+    .author-header,
+    .home-bio {
+      margin-right: $author-photo-width + $author-photo-gap;
+    }
   }
 }
 
@@ -432,18 +445,29 @@ $author-photo-pull: 16px;
 
     @include breakpoint($large) {
       position: absolute;
-      left: -$author-photo-pull;
-      top: 0;
+      top: $author-photo-cap;
+      right: 0;
       margin-bottom: 0;
     }
 
     img {
       display: block;
-      width: $author-photo-size;
-      max-width: $author-photo-size;
-      padding: 5px;
+      width: $author-photo-stacked-size;
+      max-width: 100%;
+      padding: 0;
       border: 1px solid var(--global-border-color);
-      border-radius: $border-radius;
+      border-radius: $author-photo-radius;
+      object-fit: cover;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 16px rgba(16, 24, 40, 0.05);
+
+      html[data-theme="dark"] & {
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 6px 18px rgba(0, 0, 0, 0.22);
+      }
+
+      @include breakpoint($large) {
+        width: $author-photo-width;
+        height: $author-photo-height;
+      }
     }
   }
 
